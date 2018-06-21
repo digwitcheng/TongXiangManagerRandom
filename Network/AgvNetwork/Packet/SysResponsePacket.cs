@@ -7,9 +7,6 @@ namespace AGVSocket.Network.Packet
         private byte responseType;   //需要应答报文类型
         private ResponseState responseState;  //需要应答报文状态
 
-       // public byte ResponseType { set; }
-       // public byte ResponseState { set; }
-
         public SysResponsePacket(byte serialNum, ushort agvId, byte type,ResponseState state)
         {
             this.Header = 0xAA55;

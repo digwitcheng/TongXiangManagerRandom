@@ -11,6 +11,7 @@ using AGV_V1._0.Algorithm;
 using AGV_V1._0.Util;
 using AGVSocket.Network;
 using AGVSocket.Network.EnumType;
+using AGVSocket.Network.Packet;
 
 namespace AGV_V1._0
 {
@@ -247,7 +248,7 @@ namespace AGV_V1._0
             get;
             set;
         }
-        private byte serinum = 0;
+        private byte serinum =1;
         public byte Serinum {
             get
             {
@@ -257,11 +258,22 @@ namespace AGV_V1._0
             {
                 if (value > 255)
                 {
-                    value = 0;
+                    value = 1;
                 }
                 serinum = value;
             }
         }
+        private bool isAgvReceived = true;
+        public bool IsAgvReceived
+        {
+            get { return isAgvReceived; }
+            set { isAgvReceived = value; }
+        }
+        public SendBasePacket LastSendPacket
+        {
+            get;set;
+        }
+        
 
         public Color pathColor = Color.Red;
         public Color showColor = Color.Pink;
@@ -526,7 +538,6 @@ namespace AGV_V1._0
                         Boolean IsCanMoveTo = Elc.IsVehicleCanMove(this, tx, ty);// Elc.mapnode[tx, ty].NodeCanUsed;
                         if (IsCanMoveTo&&virtualDir==tDir)
                         {
-                            Console.WriteLine("can move " + tx + "," + ty);
                             canMove = true;
                             virtualDir = tDir;
                             bool res=SetNodeOccpyed(tx, ty);

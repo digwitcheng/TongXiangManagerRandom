@@ -5,7 +5,6 @@ namespace AGVSocket.Network.Packet
     class TrayPacket:SendBasePacket
     {
         private TrayMotion trayInfo; //托盘控制信息
-       // public TrayAction TrayInfo { set; }
         protected override byte NeedLen()
         {
             return 9;

@@ -6,8 +6,6 @@ namespace AGVSocket.Network.Packet
     abstract class SendBasePacket:BasePacket
     {
 
-
-
         /// <summary>
         /// 把父类的成员数据转换成字节填充到数组中
         /// </summary>

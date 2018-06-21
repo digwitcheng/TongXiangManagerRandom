@@ -5,8 +5,6 @@ namespace AGVSocket.Network.Packet
     class AgvInfoPacket:ReceiveBasePacket
     {
         private AgvInfo info;//小车详情
-        //private const byte NEEDLEN = 24;
-        public AgvInfo Info { get; set; }
         
         public AgvInfoPacket(byte[] data)
             : base("AgvInfoPacket", data)

@@ -4,10 +4,7 @@ namespace AGVSocket.Network.Packet
 {
     class SwervePacket:SendBasePacket
     {
-        private AgvDriftAngle desDir;//目标方向
-      //  public DriftAngle DesDir {set { desDir = value; } }
-
-        
+        private AgvDriftAngle desDir;//目标方向        
         protected override byte NeedLen()
         {
             return 10;

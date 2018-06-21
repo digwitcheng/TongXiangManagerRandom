@@ -123,7 +123,7 @@ namespace AGV_V1._0.Algorithm
                 }
                 if (curPoint.H == 0)
                 {
-                    System.Console.WriteLine("astar times:"+times);
+                   // System.Console.WriteLine("astar times:"+times);
                     GetShortestPath(route, close);
                     return route;
                 }
