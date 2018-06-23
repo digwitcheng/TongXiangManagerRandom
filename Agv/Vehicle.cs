@@ -263,11 +263,23 @@ namespace AGV_V1._0
                 serinum = value;
             }
         }
+        private static Object receivedLock = new object();
         private bool isAgvReceived = true;
         public bool IsAgvReceived
         {
-            get { return isAgvReceived; }
-            set { isAgvReceived = value; }
+            get {
+                lock (receivedLock)
+                {
+                    return isAgvReceived;
+                }
+            }
+            set {
+                lock (receivedLock)
+                {
+                    isAgvReceived = value;
+                }
+            }
+            
         }
         public SendBasePacket LastSendPacket
         {
@@ -427,8 +439,8 @@ namespace AGV_V1._0
                 if (TPtr >= route.Count - 1)
                 {
                     SetNodeOccpyed(route[route.Count - 1].X, route[route.Count - 1].Y);
-                    //Arrive = true;
-                    //return MoveType.arrived;
+                    Arrive = true;
+                    return MoveType.arrived;
                     if (EqualWithRealLocation(route[route.Count - 1].X, route[route.Count - 1].Y))
                     {
                         Arrive = true;
@@ -509,15 +521,7 @@ namespace AGV_V1._0
                 }
                 if (ShouldMove(TPtr + 1) == false)
                 {
-                    BeginX = route[TPtr].X;
-                    BeginY = route[TPtr].Y;
-                    if (this.WaitEndTime < DateTime.Now && CheckAgvCorrect()==MoveType.move)//超过等待时间还不能走，则重新发送一下当前位置
-                    {
-                        Console.WriteLine("Resend Current location");
-                        return MoveType.move;
-                    }
-                    //可能没读到码，或硬件错误
-                    return MoveType.cannotReceiveRunCommands;
+                    return MoveType.cannotReceiveSwerverCommands;
                 }
 #endif
                

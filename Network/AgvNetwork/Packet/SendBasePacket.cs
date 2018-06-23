@@ -1,4 +1,5 @@
-﻿using Cowboy.Sockets;
+﻿using AGV_V1._0.NLog;
+using Cowboy.Sockets;
 using System;
 
 namespace AGVSocket.Network.Packet
@@ -36,7 +37,9 @@ namespace AGVSocket.Network.Packet
        public abstract byte[] GetBytes();
         public void SendTo(TcpSocketServer server,int vnum)
         {
-            server.SendTo(vnum+"",GetBytes());
+            byte[] data=GetBytes();
+            server.SendTo(vnum+"",data);
+            Logs.Info(data.Length + ":" + BitConverter.ToString(data));
         }
     }
 }

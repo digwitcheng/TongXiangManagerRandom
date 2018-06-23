@@ -116,8 +116,8 @@ namespace AGV_V1._0.Algorithm
                            // directionCost--;
                         }
                         int tempTraConges = close[curX, curY].Node.traCongesIntensity;
-                        
-                        surG = curPoint.G + (float)(Math.Abs(curX - nextX) + Math.Abs(curY - nextY)) + SWERVE_COST * (directionCost + tempTraConges) + tempPassDifficulty;
+
+                        surG = curPoint.G + (float)(Math.Abs(curX - nextX) + Math.Abs(curY - nextY)) + SWERVE_COST * directionCost;// + tempTraConges + tempPassDifficulty;
                         SearchUtil.AsatrPush(open, close, nextX, nextY, surG);
                     }
                 }

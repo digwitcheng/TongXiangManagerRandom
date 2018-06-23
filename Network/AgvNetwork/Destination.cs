@@ -10,49 +10,12 @@ namespace AGVSocket.Network
         private AgvDriftAngle desAngle;    //目标方向(坐标x轴正方向的夹角)
         private TrayMotion desMotion;   //目标动作
 
-        #region Properties
-        public CellPoint MidPoint
-        {
-            set
-            {
-                midPoint = value;
-            }
-            get
-            {
-                return midPoint;
-            }
-        }
-        public CellPoint DesPoint
-        {
-            set
-            {
-                desPoint = value;
-            }
-            get
-            {
-                return desPoint;
-            }
-        }
-        public AgvDriftAngle DesAngle
-        {
-            set
-            {
-                desAngle = value;
-            }
-        }
-        public TrayMotion Desmotion
-        {
-            set
-            {
-                desMotion = value; 
-            }
-        }
-        #endregion
+       
 
         public Destination(CellPoint midPoint, CellPoint desPoint, AgvDriftAngle desAngle, TrayMotion motion)
         {
-            this.MidPoint = midPoint;
-            this.DesPoint = desPoint;
+            this.midPoint = midPoint;
+            this.desPoint = desPoint;
             this.desAngle = desAngle;
             this.desMotion = motion;
 

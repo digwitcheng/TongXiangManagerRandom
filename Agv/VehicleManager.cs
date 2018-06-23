@@ -29,7 +29,7 @@ namespace AGV_V1._0
         private bool vehicleInited = false;
         private double moveCount = 0;//统计移动的格数，当前地图一格1.5米
         public const int REINIT_COUNT = 20;
-        private const int WAIT_TIME = 8;//  等待超时后还没有翻盘完成的消息就重发翻盘报文
+        private const int WAIT_TIME = 1000;//  等待超时后还没有翻盘完成的消息就重发翻盘报文
 
         private static Random rand = new Random(1);//5,/4/4 //((int)DateTime.Now.Ticks);//随机数，随机产生坐标
 
@@ -61,7 +61,7 @@ namespace AGV_V1._0
             {
                 return;
             }
-            for (int vnum =3; vnum <4; vnum++)
+            for (int vnum =2; vnum <7; vnum++)
             {
                 if (vehicles[vnum].agvInfo == null)
                 {
@@ -84,22 +84,33 @@ namespace AGV_V1._0
                 }
                 if(vehicles[vnum].IsAgvReceived == false)
                 {
+                    if (vehicles[vnum].WaitEndTime < DateTime.Now)//超过等待时间还不能走，则重新发送一下当前位置
+                    {
+                        Logs.Warn("Resend Current location");
+                   //     MessageBox.Show("resend " + vnum);
+                        SendPack(vnum, vehicles[vnum].LastSendPacket);
+                    }
                     continue;
                 }
+              // Console.WriteLine(vnum+"小车电量:"+vehicles[vnum].agvInfo.Electricity);
 
                 if (vehicles[vnum].Arrive == true && vehicles[vnum].CurState == State.carried)
-                {
+                {    
                     if (vehicles[vnum].EqualWithRealLocation(vehicles[vnum].BeginX, vehicles[vnum].BeginY))
                     {
-                           if (vehicles[vnum].agvInfo.OrderExec ==OrderExecState.Free
-                            )
+                           if (vehicles[vnum].agvInfo.OrderExec ==OrderExecState.Free )
                         {
-                            TrayPacket tp = new TrayPacket((byte)(vehicles[vnum].Serinum), (ushort)vnum, TrayMotion.TopLeft); 
+                            TrayMotion trayMotion = TrayMotion.XPositive;
+                            if (vnum == 4 || vnum == 5)
+                            {
+                                trayMotion = TrayMotion.XNegative;
+                            }
+                            TrayPacket tp = new TrayPacket((byte)(vehicles[vnum].Serinum), (ushort)vnum, trayMotion); 
                             SendPack(vnum,tp);
                             vehicles[vnum].CurState = State.unloading;                            
                         }
-                        continue;
                     } 
+                    continue;
                 }               
                 //if (vehicles[vnum].Arrive == true && vehicles[vnum].CurState == State.unloading)
                 //{
@@ -128,6 +139,11 @@ namespace AGV_V1._0
                         vehicles[vnum].CurState = State.Free;
                     }
                      continue;
+                }
+                if (vehicles[vnum].Arrive == true)
+                {
+                    MessageBox.Show("arrive wait");
+                    continue;
                 }
                 Random r = new Random(DateTime.Now.Millisecond);
                 if (vehicles[vnum].StopTime <r.Next(vnum%5) )
@@ -165,15 +181,16 @@ namespace AGV_V1._0
                     }
                     if (moveState == MoveType.clearFault)
                     {
-                        ClearFalut cf = new ClearFalut(vehicles[vnum].Serinum, (ushort)vnum);
-                        SendPack(vnum, cf);
+                        if (vehicles[vnum].agvInfo.OrderExec == OrderExecState.Free
+                            )
+                        {
+                            ClearFalutPacket cf = new ClearFalutPacket(vehicles[vnum].Serinum, (ushort)vnum);
+                            SendPack(vnum, cf);
+                        }
                     }
 
 
                 }
-
-
-
 
             }
             if (vFinished != null)
@@ -189,28 +206,27 @@ namespace AGV_V1._0
 
         private void SendPack(int vnum,SendBasePacket sendPacket)
         {
-            Console.WriteLine();
-            Console.WriteLine("-----------------------------------------------------");
-            Console.Write("[" + DateTime.Now.ToString("HH:mm:ss.fff") + "]"+"<-发送报文类型：" + (PacketType)sendPacket.Type);
-            PrintLocation(vnum);
-            CheckAlarmState(vnum);
-            AgvServerManager.Instance.SendTo(sendPacket, vnum);
-            
-
             vehicles[vnum].LastSendPacket = sendPacket;
             vehicles[vnum].IsAgvReceived = false;
-            vehicles[vnum].WaitEndTime = DateTime.Now.AddSeconds(WAIT_TIME);
+            vehicles[vnum].WaitEndTime = DateTime.Now.AddMilliseconds(WAIT_TIME);
 
-
+           
+            PrintInfomation(vnum,sendPacket);
+            CheckAlarmState(vnum);
+            AgvServerManager.Instance.SendTo(sendPacket, vnum);
 
         }
-        void PrintLocation(int vnum)
+        void PrintInfomation(int vnum,SendBasePacket sendPacket)
         {
+            Console.WriteLine();
+            Logs.Info("------------------------------------------------------");
+            String log = String.Format("<-给小车{0}发送{1}报文", vnum, (PacketType)sendPacket.Type);
+
             uint x = Convert.ToUInt32(vehicles[vnum].BeginX);
             uint y = Convert.ToUInt32(vehicles[vnum].BeginY);
             uint endX = Convert.ToUInt32(vehicles[vnum].EndX);
             uint endY = Convert.ToUInt32(vehicles[vnum].EndY);
-            Console.WriteLine(",小车"+vnum + "：(" + x + "," + y + ")终点：(" + endX + "," + endY + "),实际位置:(" + vehicles[vnum].agvInfo.CurLocation.CurNode.X / 1000.0 + "," + vehicles[vnum].agvInfo.CurLocation.CurNode.Y / 1000.0 + ") 序列号：" + vehicles[vnum].Serinum);
+           Logs.Info(String.Format(log+ "(" + x + "," + y + ")终点：(" + endX + "," + endY + "),实际位置:(" + vehicles[vnum].agvInfo.CurLocation.CurNode.X / 1000.0 + "," + vehicles[vnum].agvInfo.CurLocation.CurNode.Y / 1000.0 + ") 序列号：" + vehicles[vnum].Serinum));
         }
 
         void ClearAllCrossedNode(int vnum)
@@ -233,12 +249,12 @@ namespace AGV_V1._0
             }
            
         }
-        void SendSwerveCommand(int vnum,int angle)
-        {
-            SwervePacket sp = new SwervePacket((byte)(vehicles[vnum].Serinum++), (ushort)vnum,new AgvDriftAngle((ushort)angle));
-            AgvServerManager.Instance.SendTo(sp, vnum);
-            Console.WriteLine("send Swerver...");
-        }
+        //void SendSwerveCommand(int vnum,int angle)
+        //{
+        //    SwervePacket sp = new SwervePacket((byte)(vehicles[vnum].Serinum++), (ushort)vnum,new AgvDriftAngle((ushort)angle));
+        //    AgvServerManager.Instance.SendTo(sp, vnum);
+        //    Console.WriteLine("send Swerver...");
+        //}
         void CheckAlarmState(int vnum)
         {
             if (vehicles[vnum].agvInfo.Alarm == AlarmState.ScanNone || vehicles[vnum].agvInfo.Alarm == AlarmState.CommunicationFault)

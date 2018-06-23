@@ -5,22 +5,26 @@
         /// <summary>
         /// 无动作
         /// </summary>
-        None=0x00,
+        None = 0x00,
+
         /// <summary>
-        /// 左上包 (顶升式：顶升 )
+        /// 车头方向，0度（X轴正轴方向）
         /// </summary>
-        TopLeft  =0x01,   
+        XPositive  =0x01,
+
         /// <summary>
-        /// 皮带式（翻板式）：左下包 (顶升式：下降 )
+        /// 车头方向，90度（Y轴正轴方向）
         /// </summary>
-        DownLeft = 0x02,
+        YPositive = 0x02,
+
         /// <summary>
-        /// 右上包
+        ///车头方向，180度（X轴负轴方向）
         /// </summary>
-        TopRight = 0x03,
+        XNegative = 0x03,
+
         /// <summary>
-        /// 右下包
+        ///车头方向，270度（Y轴负轴方向）
         /// </summary>
-        DownRight = 0x04
+        YNegative = 0x04
     }
 }

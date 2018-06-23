@@ -1,6 +1,11 @@
 ﻿using AGV_V1._0.Network.ThreadCode;
 using AGV_V1._0.NLog;
+using AGV_V1._0.Queue;
+using AGV_V1._0.Util;
+using AGVSocket.Network;
+using AGVSocket.Network.Packet;
 using System;
+using System.Threading;
 
 namespace AGV_V1._0.ThreadCode
 {
@@ -28,11 +33,13 @@ namespace AGV_V1._0.ThreadCode
         {
             try
             {
-                //if (ReSendPacketQueue.Instance.IsHasData())
-                //{
-                //    SendBasePacket sp = ReSendPacketQueue.Instance.Peek();
-                //    AgvServerManager.Instance.Send(sp);
-                //}
+                if (ReSendPacketQueue.Instance.IsHasData())
+                {
+                    Vehicle v = ReSendPacketQueue.Instance.Dequeue();
+                    AgvServerManager.Instance.SendTo(v.LastSendPacket, v.Id);
+                    Logs.Warn(v.Id + " resend");
+                }
+                Thread.Sleep(ConstDefine.RESEND_TIME);
             }
             catch (Exception e)
             {

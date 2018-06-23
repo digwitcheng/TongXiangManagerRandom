@@ -37,6 +37,7 @@
         public const int TASK_TIME = 5;  //处理任务的间隔
         //public const int RESEARCH_COUNT = 10;
         public const int UNLOADING_TIME = 2000;//在投放口停留的时间
+        public const int RESEND_TIME = 100;
 
 
 

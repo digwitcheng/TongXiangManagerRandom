@@ -255,6 +255,7 @@ namespace Cowboy.Sockets
             if (_sessions.TryGetValue(sessionKey, out session))
             {
                 session.Send(data, offset, count);
+                Logs.Info(session.ToString());            
             }
             else
             {

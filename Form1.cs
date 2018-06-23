@@ -28,6 +28,7 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels.Tcp;
 using AGVSocket.Network;
 using AGVSocket.Network.Packet;
+using AGV_V1._0.Network.AgvNetwork.Packet;
 
 namespace AGV_V1._0
 {
@@ -173,8 +174,8 @@ namespace AGV_V1._0
             //SqlManager.Instance.Start();
             //SqlManager.Instance.ShowMessage += OnShowMessageWithPicBox;
 
-            SendPacketThread.Instance.Start();
-            SendPacketThread.Instance.ShowMessage += OnShowMessageWithPicBox;
+            ReSendPacketThread.Instance.Start();
+            ReSendPacketThread.Instance.ShowMessage += OnShowMessageWithPicBox;
 
         }
 
@@ -200,8 +201,8 @@ namespace AGV_V1._0
             //CheckCongestionThread.Instance.ShowMessage -= OnShowMessageWithPicBox;
             //CheckCongestionThread.Instance.End();
 
-            SendPacketThread.Instance.ShowMessage -= OnShowMessageWithPicBox;
-            SendPacketThread.Instance.End();
+            ReSendPacketThread.Instance.ShowMessage -= OnShowMessageWithPicBox;
+            ReSendPacketThread.Instance.End();
         }
 
         /// <summary>
@@ -805,10 +806,11 @@ namespace AGV_V1._0
         /// <param name="e"></param>
         private void button7_Click_1(object sender, EventArgs e)
         {
-            //InitialAgv();
-
-            VehicleManager.Instance.RandomMove(2);
-          
+            byte vnum = 6;
+            //     ChargePacket cp = new ChargePacket(vnum, (byte)vnum, new CellPoint(4000,0));
+            FinishChargePacket cp = new FinishChargePacket(vnum, (byte)vnum, new CellPoint(4000, 1000));
+            Console.WriteLine("send charge");
+            AgvServerManager.Instance.SendTo(cp, vnum);
         }
 
         private void button6_Click(object sender, EventArgs e)

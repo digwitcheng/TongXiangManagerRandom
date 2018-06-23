@@ -241,9 +241,11 @@ namespace AGV_V1._0
                     mapnode[tdx, tdy].IsAbleCross = false;
                     mapnode[tdx, tdy].Type = MapNodeType.obstacle;
                 }
-#else 
-              
+#else
+
 #endif
+               
+
 
                 switch (strType)
                 {
@@ -267,11 +269,11 @@ namespace AGV_V1._0
                         try
                         {
                             scanner.Add(new MyPoint(tdx, tdy, Direction.Left));
-                            //增加通过扫描仪的难度，使得计算路径时不会随便经过扫描仪
-                            mapnode[tdx, tdy].UpDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[0] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
-                            mapnode[tdx, tdy].DownDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[1] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
-                            mapnode[tdx, tdy].LeftDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[2] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
-                            mapnode[tdx, tdy].RightDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[3] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
+                            ////增加通过扫描仪的难度，使得计算路径时不会随便经过扫描仪
+                            //mapnode[tdx, tdy].UpDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[0] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
+                            //mapnode[tdx, tdy].DownDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[1] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
+                            //mapnode[tdx, tdy].LeftDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[2] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
+                            //mapnode[tdx, tdy].RightDifficulty += MapNode.DEFAULT_DIFFICULTY;//MapNode.DEFAULT_DIFFICULTYMapNode.DEFAULT_DIFFICULTY(dir[3] == '1' ? MapNode.DEFAULT_DIFFICULTY : MapNode.UNABLE_PASS);
                         }
                         catch (Exception ex)
                         {

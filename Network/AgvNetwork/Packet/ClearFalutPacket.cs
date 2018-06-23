@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace AGV_V1._0.Network.AgvNetwork.Packet
 {
-    class ClearFalut : SendBasePacket
+    class ClearFalutPacket : SendBasePacket
     {
-        public ClearFalut(byte serialNum, ushort agvId)
+        public ClearFalutPacket(byte serialNum, ushort agvId)
         {
             this.Header = 0xAA55;
             this.Len = NeedLen();

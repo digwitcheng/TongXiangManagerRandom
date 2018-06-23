@@ -100,7 +100,9 @@
     <Compile Include="DataBase\SqlHelper.cs" />
     <Compile Include="DataBase\SqlManager.cs" />
     <Compile Include="Network\AgvNetwork\AgvInfo.cs" />
-    <Compile Include="Network\AgvNetwork\Packet\ClearFalut.cs" />
+    <Compile Include="Network\AgvNetwork\Packet\FinishChargePacket.cs" />
+    <Compile Include="Network\AgvNetwork\Packet\ChargePacket.cs" />
+    <Compile Include="Network\AgvNetwork\Packet\ClearFalutPacket.cs" />
     <Compile Include="Network\Manager\AgvServerManager.cs" />
     <Compile Include="Network\AgvNetwork\CurrentLocation.cs" />
     <Compile Include="Network\AgvNetwork\Destination.cs" />

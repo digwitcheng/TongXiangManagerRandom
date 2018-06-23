@@ -2,7 +2,7 @@
 
 namespace AGV_V1._0.Queue
 {
-    class ReSendPacketQueue:BaseQueue<SendBasePacket>
+    class ReSendPacketQueue:BaseQueue<Vehicle>
     {
         private static ReSendPacketQueue instance;
         public static ReSendPacketQueue Instance
